@@ -4,7 +4,7 @@ const { sendProduct } = require("../../services/nodemailer");
 const express = require("express"),
   router = express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/", (req, res, next) => {
   res.sendStatus(200);
 });
 
