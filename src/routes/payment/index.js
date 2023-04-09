@@ -1,6 +1,6 @@
 const { genQrCode } = require("../../functions/payments");
 
-const { setItem } = require("../../database/index");
+const { setItem, getItems } = require("../../database/index");
 
 const express = require("express"),
   router = express.Router();
@@ -12,21 +12,18 @@ router.post("/qrcode", async (req, res, next) => {
     return res.sendStatus(404);
   }
 
-  const prod = {
-    id: "0230203",
-    name: "arte",
-    value: 1.0,
-    filepath: 'primeira-eucaristia.cdr'
-  };
+  const product = await getItems({
+    path: `products/${data.prodId}`
+  });
 
-  const qrdata = await genQrCode({ description: "arte", value: prod.value });
+  const qrdata = await genQrCode({ description: product.desc, value: Number(product.valor) });
 
   setItem({
     path: `payments/qr/${qrdata.id}`,
     params: {
       email: data.email,
-      prodId: prod.id,
-      filepath: prod.filepath
+      prodId: data.prodId,
+      filepath: product.filepath
     },
   });
 
