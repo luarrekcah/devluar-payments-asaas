@@ -22,8 +22,6 @@ router.post("/", async (req, res, next) => {
       const pdata = await getItems({ path: `payments/qr/${payment.pixQrCodeId}` });
       console.log(pdata);
       if (pdata) {
-        // Coletar produto
-        // Enviar produto pro email e retornar OK
         sendProduct(pdata.email, pdata.filepath)
           .then((result) => {
             if (result) {
