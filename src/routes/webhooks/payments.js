@@ -16,10 +16,12 @@ router.post("/", async (req, res, next) => {
   switch (webhookData.event) {
     case "PAYMENT_CREATED":
       res.sendStatus(200);
-    break;
+      break;
     case "PAYMENT_RECEIVED":
       const payment = webhookData.payment;
-      const pdata = await getItems({ path: `payments/qr/${payment.pixQrCodeId}` });
+      const pdata = await getItems({
+        path: `payments/qr/${payment.pixQrCodeId}`,
+      });
       console.log(pdata);
       if (pdata) {
         sendProduct(pdata.email, pdata.filepath)
@@ -37,6 +39,9 @@ router.post("/", async (req, res, next) => {
       } else {
         return res.sendStatus(400);
       }
+      break;
+    default:
+      res.sendStatus(200);
       break;
   }
 });
